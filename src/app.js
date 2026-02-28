@@ -9,6 +9,8 @@ const musicRoutes = require("./routes/music.routes");
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 /* ---------- ENV VALIDATION ---------- */
 if (!process.env.CLIENT_URL) {
   throw new Error("CLIENT_URL not defined in env");
