@@ -6,9 +6,7 @@ const { authenticate, authorize } = require("../middlewares/auth.middleware");
 
 const router = express.Router();
 
-
 /* ---------- MULTER CONFIG ---------- */
-
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
@@ -22,10 +20,9 @@ const upload = multer({
   }
 });
 
-
 /* ---------- ROUTES ---------- */
 
-// Upload music
+// Upload music -> POST /api/musics
 router.post(
   "/musics",
   authenticate,
@@ -34,8 +31,7 @@ router.post(
   musicController.createMusic
 );
 
-
-// Create album
+// Create album -> POST /api/albums
 router.post(
   "/albums",
   authenticate,
@@ -43,8 +39,7 @@ router.post(
   musicController.createAlbum
 );
 
-
-// Get all musics
+// Get all musics -> GET /api/musics
 router.get(
   "/musics",
   authenticate,
@@ -52,8 +47,7 @@ router.get(
   musicController.getAllMusics
 );
 
-
-// Get all albums
+// Get all albums -> GET /api/albums
 router.get(
   "/albums",
   authenticate,
@@ -61,14 +55,12 @@ router.get(
   musicController.getAllAlbums
 );
 
-
-// Get album by ID
+// Get album by ID -> GET /api/albums/:albumId
 router.get(
   "/albums/:albumId",
   authenticate,
   authorize("user", "artist"),
   musicController.getAlbumById
 );
-
 
 module.exports = router;

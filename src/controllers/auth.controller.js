@@ -26,10 +26,16 @@ function setAuthCookie(res, token) {
 
 async function registerUser(req, res) {
   try {
-    const { username, email, password } = req.body;
+    // 1. Get role from req.body
+    const { username, email, password, role } = req.body;
 
     if (!username || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // 2. Prevent Mongoose validation crash (minlength: 3)
+    if (username.length < 3) {
+      return res.status(400).json({ message: "Username must be at least 3 characters long" });
     }
 
     if (password.length < 6) {
@@ -46,11 +52,12 @@ async function registerUser(req, res) {
 
     const hash = await bcrypt.hash(password, 12);
 
+    // 3. Save the actual role selected by the user
     const user = await userModel.create({
       username,
       email,
       password: hash,
-      role: "user" // force role
+      role: role || "user" 
     });
 
     const token = generateToken(user);
@@ -82,7 +89,7 @@ async function loginUser(req, res) {
 
     const user = await userModel.findOne({
       $or: [{ username }, { email }]
-    });
+    }).select("+password"); 
 
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
