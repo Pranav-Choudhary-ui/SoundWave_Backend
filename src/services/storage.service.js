@@ -33,7 +33,7 @@ async function uploadFile(fileBuffer) {
   }
 
   try {
-    const result = await imagekit.upload({
+    const result = await imagekit.files.upload({
       file: fileBuffer,
       fileName: generateFileName(),
       folder: `${NODE_ENV || "dev"}/music`
