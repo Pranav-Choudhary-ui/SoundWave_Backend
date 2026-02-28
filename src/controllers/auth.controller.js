@@ -19,7 +19,7 @@ function setAuthCookie(res, token) {
   res.cookie("token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    sameSite: "none",
     maxAge: 7 * 24 * 60 * 60 * 1000
   });
 }
@@ -124,7 +124,7 @@ function logoutUser(req, res) {
   res.clearCookie("token", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict"
+    sameSite: "none"
   });
 
   res.status(200).json({ message: "User logged out successfully" });
